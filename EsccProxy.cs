@@ -31,7 +31,7 @@ namespace EsccWebTeam.Data.Xml
                 // Load settings from web.config which allow requests to go out through the ESCC proxy server
                 NameValueCollection config = ConfigurationManager.GetSection("EsccWebTeam.Data.Xml/Proxy") as NameValueCollection;
 
-                if (config["User"] != null)
+                if (config != null && config["User"] != null)
                 {
                     user = config["User"];
                     password = (config["Password"] != null) ? config["Password"] : String.Empty;
