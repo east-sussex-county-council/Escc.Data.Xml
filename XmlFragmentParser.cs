@@ -8,6 +8,7 @@ namespace EsccWebTeam.Data.Xml
     /// <summary>
     /// Utility methods to parse and work with fragments of XML
     /// </summary>
+    [Obsolete("Use the HtmlParser class in the Escc.Html NuGet package")]
     public static class XmlFragmentParser
     {
         private static Collection<string> xhtmlMultiValuedAttributes = new Collection<string>(new string[] { "class", "rel", "rev" }); // and others?
