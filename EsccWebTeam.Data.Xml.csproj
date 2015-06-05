@@ -68,6 +68,9 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Escc.Registration.Website\packages\Newtonsoft.Json.6.0.8\lib\net20\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -76,6 +79,7 @@
   <ItemGroup>
     <Compile Include="EsccProxy.cs" />
     <Compile Include="IWebServiceCredentialsProvider.cs" />
+    <Compile Include="WebApiRequest.cs" />
     <Compile Include="WebServiceConfigurationCredentialsProvider.cs" />
     <Compile Include="WebServiceHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
+    <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
