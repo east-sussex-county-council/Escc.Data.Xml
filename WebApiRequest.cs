@@ -20,7 +20,7 @@ namespace EsccWebTeam.Data.Xml
         /// <param name="data">The data.</param>
         public void Post(Uri url, object data)
         {
-            var request = PrepareJsonRequestWithBody(url, data);
+            var request = PrepareJsonRequestWithBody(url, "POST", data);
             using (request.GetResponse()) { }
         }
 
@@ -33,7 +33,7 @@ namespace EsccWebTeam.Data.Xml
         /// <returns></returns>
         public T Post<T>(Uri url, object data)
         {
-            var request = PrepareJsonRequestWithBody(url, data);
+            var request = PrepareJsonRequestWithBody(url, "POST", data);
 
             return ReturnObjectFromResponse<T>(request);
         }
@@ -45,8 +45,7 @@ namespace EsccWebTeam.Data.Xml
         /// <param name="data">The data.</param>
         public void Put(Uri url, object data)
         {
-            var request = PrepareJsonRequestWithBody(url, data);
-            request.Method = "PUT";
+            var request = PrepareJsonRequestWithBody(url, "PUT", data);
 
             using (request.GetResponse()) { }
         }
@@ -60,17 +59,16 @@ namespace EsccWebTeam.Data.Xml
         /// <returns></returns>
         public T Put<T>(Uri url, object data)
         {
-            var request = PrepareJsonRequestWithBody(url, data);
-            request.Method = "PUT";
+            var request = PrepareJsonRequestWithBody(url, "PUT", data);
 
             return ReturnObjectFromResponse<T>(request);
         }
 
-        private WebRequest PrepareJsonRequestWithBody(Uri url, object data)
+        private WebRequest PrepareJsonRequestWithBody(Uri url, string method, object data)
         {
             var request = WebRequest.Create(url);
             request.Credentials = new WebServiceConfigurationCredentialsProvider().CreateCredentials();
-            request.Method = "POST";
+            request.Method = method;
 
             string postData = JsonConvert.SerializeObject(data);
             var encoding = new ASCIIEncoding();
