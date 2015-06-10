@@ -14,6 +14,19 @@ namespace EsccWebTeam.Data.Xml
     public class WebApiRequest
     {
         /// <summary>
+        /// Gets data from the specified URL and returns an object of type T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url">The URL.</param>
+        /// <returns></returns>
+        public T Get<T>(Uri url)
+        {
+            var request = PrepareJsonRequest(url, "GET");
+
+            return ReturnObjectFromResponse<T>(request);
+        }
+
+        /// <summary>
         /// Post data to the specified URL without returning an object.
         /// </summary>
         /// <param name="url">The URL.</param>
@@ -66,9 +79,7 @@ namespace EsccWebTeam.Data.Xml
 
         private WebRequest PrepareJsonRequestWithBody(Uri url, string method, object data)
         {
-            var request = WebRequest.Create(url);
-            request.Credentials = new WebServiceConfigurationCredentialsProvider().CreateCredentials();
-            request.Method = method;
+            var request = PrepareJsonRequest(url, method);
 
             string postData = JsonConvert.SerializeObject(data);
             var encoding = new ASCIIEncoding();
@@ -82,6 +93,14 @@ namespace EsccWebTeam.Data.Xml
                 requestStream.Write(postDataAsBytes, 0, postDataAsBytes.Length);
             }
 
+            return request;
+        }
+
+        private static WebRequest PrepareJsonRequest(Uri url, string method)
+        {
+            var request = WebRequest.Create(url);
+            request.Credentials = new WebServiceConfigurationCredentialsProvider().CreateCredentials();
+            request.Method = method;
             return request;
         }
 
