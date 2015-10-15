@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace EsccWebTeam.Data.Xml
+namespace Escc.Net
 {
     /// <summary>
     /// Provides credentials for accessing web services
     /// </summary>
-    public interface IWebServiceCredentialsProvider
+    public interface IWebApiCredentialsProvider
     {
         /// <summary>
         /// Creates the credentials.

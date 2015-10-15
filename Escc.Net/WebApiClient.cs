@@ -6,13 +6,37 @@ using System.Security.Policy;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace EsccWebTeam.Data.Xml
+namespace Escc.Net
 {
     /// <summary>
     /// Make JSON requests to .NET Web APIs
     /// </summary>
-    public class WebApiRequest
+    public class WebApiClient : IWebApiClient
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebApiClient"/> class.
+        /// </summary>
+        public WebApiClient()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebApiClient"/> class.
+        /// </summary>
+        /// <param name="credentialsProvider">A strategy for getting credentials for the web request.</param>
+        public WebApiClient(IWebApiCredentialsProvider credentialsProvider)
+        {
+            CredentialsProvider = credentialsProvider;
+        }
+
+        /// <summary>
+        /// Gets or sets the credentials provider.
+        /// </summary>
+        /// <value>
+        /// The credentials provider.
+        /// </value>
+        public IWebApiCredentialsProvider CredentialsProvider { get; set; }
+
         /// <summary>
         /// Gets data from the specified URL and returns an object of type T
         /// </summary>
@@ -21,7 +45,7 @@ namespace EsccWebTeam.Data.Xml
         /// <returns></returns>
         public T Get<T>(Uri url)
         {
-            var request = PrepareJsonRequest(url, "GET");
+            var request = PrepareJsonRequest(url, "GET", CredentialsProvider);
 
             return ReturnObjectFromResponse<T>(request);
         }
@@ -79,7 +103,7 @@ namespace EsccWebTeam.Data.Xml
 
         private WebRequest PrepareJsonRequestWithBody(Uri url, string method, object data)
         {
-            var request = PrepareJsonRequest(url, method);
+            var request = PrepareJsonRequest(url, method, CredentialsProvider);
 
             string postData = JsonConvert.SerializeObject(data);
             var encoding = new ASCIIEncoding();
@@ -96,15 +120,18 @@ namespace EsccWebTeam.Data.Xml
             return request;
         }
 
-        private static WebRequest PrepareJsonRequest(Uri url, string method)
+        private static WebRequest PrepareJsonRequest(Uri url, string method, IWebApiCredentialsProvider credentialsProvider)
         {
             var request = WebRequest.Create(url);
-            request.Credentials = new WebServiceConfigurationCredentialsProvider().CreateCredentials();
+            if (credentialsProvider != null)
+            {
+                request.Credentials = credentialsProvider.CreateCredentials();
+            }
             request.Method = method;
             return request;
         }
 
-        private T ReturnObjectFromResponse<T>(WebRequest request)
+        private static T ReturnObjectFromResponse<T>(WebRequest request)
         {
             using (var response = request.GetResponse())
             {

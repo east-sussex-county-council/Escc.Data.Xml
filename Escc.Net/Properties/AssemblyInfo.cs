@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
@@ -7,11 +8,11 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EsccWebTeam.Data.Xml")]
-[assembly: AssemblyDescription("Utility methods for working with XML and web services")]
+[assembly: AssemblyTitle("Escc.Net")]
+[assembly: AssemblyDescription("A code library for connecting to online resources")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("East Sussex County Council")]
-[assembly: AssemblyProduct("EsccWebTeam.Data.Xml")]
+[assembly: AssemblyProduct("Escc.Net")]
 [assembly: AssemblyCopyright("Copyright © East Sussex County Council 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -37,3 +38,4 @@ using System.Security;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: AllowPartiallyTrustedCallersAttribute]
+[assembly: CLSCompliant(true)]
