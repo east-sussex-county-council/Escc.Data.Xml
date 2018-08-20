@@ -1,10 +1,49 @@
 # Escc.Net
 
-A code library for connecting to online resources.
+A .NET Standard code library for connecting to online resources.
+
+The configuration options shown below are for .NET Framework applications and can be read using classes in the separate `Escc.Net.Configuration` package (also defined in this repository).
 
 ## Configure a proxy server for web requests
 
-When making web requests, it's common to need a proxy server when running in one environment and not to need one when running in another. `ConfigurationProxyProvider` lets you load those settings from `web.config` or `app.config`.
+When making web requests, it's common to need a proxy server when running in one environment and not to need one when running in another. The `IProxyProvider` interface allows you to load those settings from anywhere. 
+
+### From JSON (.NET Core)
+
+	using Escc.Net;
+
+	public void ConfigureServices(IServiceCollection services)
+    {
+		...
+    	services.AddOptions();
+	    services.Configure<ConfigurationSettings>(options => Configuration.GetSection("Escc.Net").Bind(options));
+    	services.AddScoped<IProxyProvider, ProxyFromConfiguration>();
+		...
+	}
+
+Inject the dependency and use it:
+
+    public ExampleClass(IProxyProvider proxyProvider)
+	{
+		var exampleRequest = WebRequest.Create(new Uri("http://www.example.org"));
+		exampleRequest.Proxy = proxyProvider.CreateProxy();
+	}
+
+Configuration settings would typically be in `appsettings.json`:
+
+	{
+	  "Escc.Net": {
+	    "Proxy": {
+	      "Server": "http://127.0.0.1",
+	      "User": "domain\\user",
+	      "Password": "password"
+	    }
+	  }
+	}
+
+### From web.config or app.config (.NET Framework)
+
+`ConfigurationProxyProvider` lets you load those settings from `web.config` or `app.config`.
 
 	var exampleRequest = WebRequest.Create(new Uri("http://www.example.org"));
 	var proxyProvider = new ConfigurationProxyProvider();
@@ -26,9 +65,6 @@ When making web requests, it's common to need a proxy server when running in one
 			</Proxy>
 		</Escc.Net>
 	<configuration>
-
-
-The `IProxyProvider` interface allows you to replace `ConfigurationProxyProvider` with another implementation.
 
 ## Request data from a URL (particularly XML data)
 
@@ -59,12 +95,44 @@ The `IHttpRequestClient` interface allows you to replace `HttpRequestClient` wit
 
 When you request data from or post data to a .NET Web API you need to configure the web request and handle deserialisation of the returned object to the expected return type. The `WebApiClient` class handles that for you.
 
+### From JSON (.NET Core)
+
+	using Escc.Net;
+
+	public void ConfigureServices(IServiceCollection services)
+    {
+		...
+    	services.AddOptions();
+	    services.Configure<ConfigurationSettings>(options => Configuration.GetSection("Escc.Net").Bind(options));
+    	services.AddTransient<IWebApiClient, WebApiClient>();
+    	services.AddScoped<IWebApiCredentialsProvider, WebApiCredentialsFromConfiguration>();
+		...
+	}
+
+Inject the dependency and use it:
+
+    public ExampleClass(IWebApiClient api)
+	{
+	    return api.Get<ReturnType>(new Uri("http://example.org/ExampleApi/ExampleMethod"));
+	}
+
+Configuration settings would typically be in `appsettings.json`:
+
+	{
+	  "Escc.Net": {
+	    "WebApi": {
+	      "User": "domain\\user",
+	      "Password": "password"
+	    }
+	  }
+	}
+
+### From web.config or app.config (.NET Framework)
+
     var api = new WebApiClient(new ConfigurationWebApiCredentialsProvider());
     return api.Get<ReturnType>(new Uri("http://example.org/ExampleApi/ExampleMethod"));
 
-The `IWebApiClient` interface allows you to replace `WebApiClient` with another implementation.
-
-`ConfigurationWebApiCredentialsProvider` loads its authentication settings from `web.config` or `app.config`, but you can replace this with your own `IWebApiCredentialsProvider` implementation:
+`ConfigurationWebApiCredentialsProvider` loads its authentication settings from `web.config` or `app.config`:
 
   	<configuration>
 		<configSections>
@@ -91,7 +159,3 @@ When you connect to an ASMX web service and call a method that returns anything 
 You can also pass in the XML namespace of the data object, if that is different to the namespace of the web service.
 
 The `IProxyObjectConverter` interface allows you to replace `WebServiceProxyConverter` with another implementation.
-
-## NuGet package
-
-The NuGet project in this solution uses [NuBuild](https://github.com/bspell1/NuBuild) to create the NuGet package, and we [reference our private feed using a nuget.config file](http://blog.davidebbo.com/2014/01/the-right-way-to-restore-nuget-packages.html).

@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Net;
 
-namespace Escc.Net
+namespace Escc.Net.Configuration
 {
     /// <summary>
     /// Read proxy server settings from <c>web.config</c> or <c>app.config</c>.

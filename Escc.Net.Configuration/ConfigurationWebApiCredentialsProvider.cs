@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Net;
 
-namespace Escc.Net
+namespace Escc.Net.Configuration
 {
     /// <summary>
     /// Reads credentials for accessing web services from web.config or app.config
@@ -25,13 +25,6 @@ namespace Escc.Net
                 return new NetworkCredential(user, password);
             }
             
-            // Support legacy values in appSettings
-            if (!String.IsNullOrEmpty(ConfigurationManager.AppSettings["ConnectToCouncilWebServicesAccount"]) &&
-                !String.IsNullOrEmpty(ConfigurationManager.AppSettings["ConnectToCouncilWebServicesPassword"]))
-            {
-                return new NetworkCredential(ConfigurationManager.AppSettings["ConnectToCouncilWebServicesAccount"], ConfigurationManager.AppSettings["ConnectToCouncilWebServicesPassword"]);
-            }
-
             // Fall back to using the current credentials
             return CredentialCache.DefaultCredentials;
         }

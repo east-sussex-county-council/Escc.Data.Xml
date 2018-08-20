@@ -179,7 +179,7 @@ namespace Escc.Net
                     {
 
                         var settings = new XmlReaderSettings();
-                        settings.ProhibitDtd = false; // Allow a DTD to be present in the XML, since it generally is there in a web page
+                        settings.DtdProcessing = DtdProcessing.Ignore; // Allow a DTD to be present in the XML, since it generally is there in a web page
                         settings.XmlResolver = null; // But don't follow the link to the DTD, which generally leads to a timeout
                         var reader = XmlReader.Create(xmlResponse.GetResponseStream(), settings);
                         try
