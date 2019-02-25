@@ -10,12 +10,12 @@
     <Company>East Sussex County Council</Company>
     <Authors>East Sussex County Council</Authors>
     <PackageIconUrl>https://www.eastsussex.gov.uk/apple-touch-icon.png</PackageIconUrl>
-    <Version>2.0.0</Version>
+    <Version>3.0.0</Version>
     <PackageLicenseUrl>http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/east-sussex-county-council/Escc.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/east-sussex-county-council/Escc.Net</RepositoryUrl>
     <PackageTags>proxy webapi</PackageTags>
-    <PackageReleaseNotes>2.0.0 targets .NET Standard</PackageReleaseNotes>
+    <PackageReleaseNotes>3.0.0 removes HttpRequestClient as a way to make HTTP requests and replaces it with HttpClientProvider.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

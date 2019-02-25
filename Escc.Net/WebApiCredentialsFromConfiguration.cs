@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Microsoft.Extensions.Options;
 
@@ -36,6 +37,69 @@ namespace Escc.Net
             
             // Fall back to using the current credentials
             return CredentialCache.DefaultCredentials;
+        }
+
+        /// <summary>
+        /// Compares this instance with another instance, and determines that they are equal if the configured values they read are the same
+        /// </summary>
+        /// <param name="obj">Another instance of <see cref="WebApiCredentialsFromConfiguration"/></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            var other = obj as WebApiCredentialsFromConfiguration;
+            if (other != null)
+            {
+                var thisConfig = (_configuration != null) ? _configuration.User + _configuration.Password : string.Empty;
+                var otherConfig = (other._configuration != null) ? other._configuration.User + other._configuration.Password : string.Empty;
+                return thisConfig == otherConfig;
+            }
+            else { return base.Equals(obj); }
+        }
+
+        /// <summary>
+        /// Gets a hash for comparison based on the hashes of the configured username and password
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return -1607759644 + EqualityComparer<string>.Default.GetHashCode(_configuration?.User) + EqualityComparer<string>.Default.GetHashCode(_configuration?.Password);
+        }
+
+        /// <summary>
+        /// Compares this instance with another instance, and determines that they are equal if the configured values they read are the same
+        /// </summary>
+        /// <param name="obj1"></param>
+        /// <param name="obj2"></param>
+        /// <returns></returns>
+        public static bool operator == (WebApiCredentialsFromConfiguration obj1, WebApiCredentialsFromConfiguration obj2)
+        {
+            if (ReferenceEquals(obj1, obj2))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj1, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(obj2, null))
+            {
+                return false;
+            }
+
+            return obj1.Equals(obj2);
+        }
+
+        /// <summary>
+        /// Compares this instance with another instance, and determines that they are not equal if the configured values they read are different
+        /// </summary>
+        /// <param name="obj1"></param>
+        /// <param name="obj2"></param>
+        /// <returns></returns>
+        public static bool operator !=(WebApiCredentialsFromConfiguration obj1, WebApiCredentialsFromConfiguration obj2)
+        {
+            return !(obj1 == obj2);
         }
     }
 }
